@@ -1,5 +1,5 @@
 const {NormalizeURL}=require('./crawl.js')
-const {test,expect}=require('@global/jest')
+const {test,expect}=require('@jest/globals')
 
 test('check protocol' ,()=>{
     const inputurl='https://learnweb3.io'
