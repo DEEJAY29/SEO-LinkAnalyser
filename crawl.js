@@ -61,14 +61,14 @@ function getHTMLURLs(htmlbdy,base){                  //extracts all urls from th
     const elements=doc.window.document.querySelectorAll("a")
     for(element of elements){
         if(element.href.slice(0,1)==='/'){
-            try{urls.push(new URL(element.href,base))                   //converts relative urls to absolute urls
+            try{urls.push(new URL(element.href,base).href)                   //converts relative urls to absolute urls
             }
             catch(error){
                 console.log(`${error.message}:${element.href}`)
             }
         }
         else{
-            try{urls.push(new URL(element.href))
+            try{urls.push(new URL(element.href).href)
             }
             catch(error){
                 console.log(`${error.message}:${element.href}`)
