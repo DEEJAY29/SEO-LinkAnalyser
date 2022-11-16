@@ -1,15 +1,23 @@
-console.log(process.argv);
+//console.log(process.argv);
+const {pagecrawler}=require('./crawl.js')
+const {printpages}=require('./report.js')
 
 
-function main(){
+async function main(){
     if(process.argv.length>3){
         console.log("More than one arguments passed")
+        return
     }
-    if(process.argv.length>3){
+    if(process.argv.length<3){
         console.log("No argument passed")
+        return
     }
-    const requrl=process.argv[2]
-    console.log(`Now Crwaling on ${requrl}`)
+    const reqURL=process.argv[2]
+    console.log(`Now Crwaling on ${reqURL}`)
+
+    const pages = await pagecrawler(reqURL, reqURL, {})
+
+    printpages(pages)
 }
 
 main()

@@ -10,58 +10,59 @@ function NormalizeURL(url){                                  //normalizing the u
 }
 
 async function pagecrawler(base_url,current_url,totalpages){
-    console.log(`Now crawling ${current_url}...`)
+    
 
     const baseobject=new URL(base_url)
     const currentobject =new URL(current_url)
     if(currentobject.hostname!==baseobject.hostname){             //checking if the function has moved out from the base domain
         console.log("External link, exiting...")
-        return
+        return totalpages
     }
 
     const normalizeurl=NormalizeURL(current_url)
 
-    if (totalpages[normalizeurl]>1){                              //if the page has already been traversed this implies an entry 
+    if (totalpages[normalizeurl]>0){                              //if the page has already been traversed this implies an entry 
         totalpages[normalizeurl]++                                // already exists,hence updating the entry and returning the func
-        return
+        return totalpages
     }
-
-    totalpages[normalizeurl]=1                                    // creating entry for new page
-
-
-
-    htmlbody=''
+    
+    totalpages[normalizeurl]=1       
+    console.log(`Now crawling ${current_url}...`)                             // creating entry for new page
+    let htmlbody=''
     try{                                                                   //extracting the html body of the page through a request
         const webpage=await fetch(current_url)
         if (webpage.status>399){
             console.log(`HTTP error- code ${webpage.status}`)
-            return 
+            return totalpages
         }
         const type=webpage.headers.get('content-type')
-        if(type!=='text/html'){
+        if(!type.includes('text/html')){
             console.log("Doesn't contain text/html content" )
-            return
+            return totalpages
         }
-        htmlbody=webpage.text
+        htmlbody=await webpage.text()
+
     }
     catch(err){
         console.log(err.message)
-    }
-
+    } 
     const nextpages=getHTMLURLs(htmlbody,base_url)                 //extracts all urls from the current html body of the page
     for(const page of nextpages){
         totalpages=await pagecrawler(base_url,page,totalpages)           //calling recursive func on all the links in all further pages
     }
+
+  
     return totalpages
 }
 
 function getHTMLURLs(htmlbdy,base){                  //extracts all urls from the html body and pushes them into an array
     const urls=[]
     const doc=new JSDOM(htmlbdy)
-    const elements=doc.window.document.querySelectorAll("a")
-    for(element of elements){
+    const elements=doc.window.document.querySelectorAll('a')
+    for(const element of elements){
         if(element.href.slice(0,1)==='/'){
-            try{urls.push(new URL(element.href,base).href)                   //converts relative urls to absolute urls
+            try{
+                urls.push(new URL(element.href,base).href)                   //converts relative urls to absolute urls
             }
             catch(error){
                 console.log(`${error.message}:${element.href}`)
