@@ -18,6 +18,8 @@ async function main(){
     const pages = await pagecrawler(reqURL, reqURL, {})
 
     printpages(pages)
+    console.log("------------------------END OF REPORT-------------------------------")
+    console.log(`This programming ran for ${process.uptime()} seconds`)
 }
 
 main()
