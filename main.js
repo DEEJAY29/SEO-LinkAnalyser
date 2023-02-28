@@ -1,4 +1,4 @@
-//console.log(process.argv);
+
 const {pagecrawler}=require('./crawl.js')
 const {printpages}=require('./report.js')
 

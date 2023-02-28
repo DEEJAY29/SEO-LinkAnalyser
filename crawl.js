@@ -1,4 +1,4 @@
-#!/home/dhruv/.nvm/versions/node/v19.1.0/bin/node
+//#!/home/dhruv/.nvm/versions/node/v19.1.0/bin/node
 
 const {JSDOM}=require('jsdom')
 
