@@ -1,5 +1,3 @@
-//#!/home/dhruv/.nvm/versions/node/v19.1.0/bin/node
-
 const {JSDOM}=require('jsdom')
 
 function NormalizeURL(url){                                  //normalizing the url so that all urls are deemed to be same
