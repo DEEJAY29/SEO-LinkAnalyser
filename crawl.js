@@ -9,12 +9,15 @@ function NormalizeURL(url){                                  //normalizing the u
     return fullurl
 }
 
+let exturls=[]
+
 async function pagecrawler(base_url,current_url,totalpages){
     
 
     const baseobject=new URL(base_url)
     const currentobject =new URL(current_url)
-    if(currentobject.hostname!==baseobject.hostname){             //checking if the function has moved out from the base domain
+    if(currentobject.hostname!==baseobject.hostname){             
+        exturls.push(currentobject.href)
         console.log("External link, exiting...")
         return totalpages
     }
@@ -84,5 +87,6 @@ function getHTMLURLs(htmlbdy,base){                  //extracts all urls from th
 module.exports={
     NormalizeURL,
     getHTMLURLs,
-    pagecrawler
+    pagecrawler,
+    exturls
 }
