@@ -1,6 +1,6 @@
 // printReport takes a dictionary of pages and prints them
 // to the console in a human-friendly way
-function printpages(pages){
+function printpages(pages,exturls){
   console.log('==========')
   console.log('REPORT')
   console.log('==========')
@@ -9,6 +9,11 @@ function printpages(pages){
     const url = sortedPage[0]
     const count = sortedPage[1]
     console.log(`Found ${count} internal links to ${url}`)
+  }
+  if(exturls.length>0){
+    for(const url of exturls){
+      console.log(url)
+    }
   }
 }
 

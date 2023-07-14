@@ -19,14 +19,14 @@ async function pagecrawler(base_url,current_url,totalpages){
     if(currentobject.hostname!==baseobject.hostname){             
         exturls.push(currentobject.href)
         console.log("External link, exiting...")
-        return totalpages
+        return totalpages,exturls
     }
 
     const normalizeurl=NormalizeURL(current_url)
 
     if (totalpages[normalizeurl]>0){                              //if the page has already been traversed this implies an entry 
         totalpages[normalizeurl]++                                // already exists,hence updating the entry and returning the func
-        return totalpages
+        return totalpages,exturls
     }
     
     totalpages[normalizeurl]=1       
@@ -36,12 +36,12 @@ async function pagecrawler(base_url,current_url,totalpages){
         const webpage=await fetch(current_url)
         if (webpage.status>399){
             console.log(`HTTP error- code ${webpage.status}`)
-            return totalpages
+            return totalpages,exturls
         }
         const type=webpage.headers.get('content-type')
         if(!type.includes('text/html')){
             console.log("Doesn't contain text/html content" )
-            return totalpages
+            return totalpages,exturls
         }
         htmlbody=await webpage.text()
 
@@ -55,7 +55,7 @@ async function pagecrawler(base_url,current_url,totalpages){
     }
 
   
-    return totalpages
+    return totalpages,exturls
 }
 
 function getHTMLURLs(htmlbdy,base){                  //extracts all urls from the html body and pushes them into an array
@@ -87,6 +87,5 @@ function getHTMLURLs(htmlbdy,base){                  //extracts all urls from th
 module.exports={
     NormalizeURL,
     getHTMLURLs,
-    pagecrawler,
-    exturls
+    pagecrawler
 }

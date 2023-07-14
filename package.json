@@ -18,6 +18,6 @@
     "jsdom": "^20.0.2"
   },
   "bin": {
-    "crawler":"bin/main.js"
+    "crawler": "bin/main.js"
   }
 }
