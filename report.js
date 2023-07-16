@@ -11,9 +11,13 @@ function printpages(pages,exturls){
     console.log(`Found ${count} internal links to ${url}`)
   }
   if(exturls.length>0){
+    console.log("External links are:-")
     for(const url of exturls){
       console.log(url)
     }
+  }
+  else{
+    console.log("No external links")
   }
 }
 

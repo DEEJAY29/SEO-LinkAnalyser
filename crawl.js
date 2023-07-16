@@ -38,6 +38,7 @@ async function pagecrawler(base_url,current_url,totalpages){
             console.log(`HTTP error- code ${webpage.status}`)
             return totalpages,exturls
         }
+        
         const type=webpage.headers.get('content-type')
         if(!type.includes('text/html')){
             console.log("Doesn't contain text/html content" )

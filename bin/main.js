@@ -21,5 +21,8 @@ async function main(){
     console.log("------------------------END OF REPORT-------------------------------")
     console.log(`This programming ran for ${process.uptime()} seconds`)
 }
-
+try{
 main()
+}catch(error){
+    console.log("error.message")
+}
