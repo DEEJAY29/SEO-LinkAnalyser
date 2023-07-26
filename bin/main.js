@@ -15,9 +15,9 @@ async function main(){
     const reqURL=process.argv[2]
     console.log(`Now Crwaling on ${reqURL}`)
 
-    const {pages,externalurls} = await pagecrawler(reqURL, reqURL, {})
+    const pages = await pagecrawler(reqURL, reqURL,{},"")
 
-    printpages(pages,externalurls)
+    printpages(pages)
     console.log("------------------------END OF REPORT-------------------------------")
     console.log(`This programming ran for ${process.uptime()} seconds`)
 }

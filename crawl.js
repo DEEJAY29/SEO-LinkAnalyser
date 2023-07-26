@@ -1,5 +1,6 @@
 const {JSDOM}=require('jsdom')
 
+
 function NormalizeURL(url){                                  //normalizing the url so that all urls are deemed to be same
     const url1=new URL(url)                                   // ex- www.GOOgle.com
     let fullurl=`${url1.host}${url1.pathname}`                //     www.google.com/
@@ -9,40 +10,52 @@ function NormalizeURL(url){                                  //normalizing the u
     return fullurl
 }
 
-let exturls=[]
 
-async function pagecrawler(base_url,current_url,totalpages){
+async function pagecrawler(base_url,current_url,totalpages={},previous_url=""){
     
 
     const baseobject=new URL(base_url)
     const currentobject =new URL(current_url)
     if(currentobject.hostname!==baseobject.hostname){             
-        exturls.push(currentobject.href)
+        //totalpages[previous_url].externalurls.push(currentobject.href)
+        //console.log(totalpages)
         console.log("External link, exiting...")
-        return totalpages,exturls
+        return totalpages
     }
 
     const normalizeurl=NormalizeURL(current_url)
 
-    if (totalpages[normalizeurl]>0){                              //if the page has already been traversed this implies an entry 
-        totalpages[normalizeurl]++                                // already exists,hence updating the entry and returning the func
-        return totalpages,exturls
+    if (totalpages.hasOwnProperty(normalizeurl)){                              //if the page has already been traversed this implies an entry 
+        totalpages[normalizeurl].count++       
+        //console.log(totalpages)                         // already exists,hence updating the entry and returning the func
+        return totalpages
     }
-    
-    totalpages[normalizeurl]=1       
+
+    /*if (totalpages[normalizeurl][0]>0){                              //if the page has already been traversed this implies an entry 
+        totalpages[normalizeurl][0]++                                // already exists,hence updating the entry and returning the func
+        return totalpages
+    }*/
+    /*totalpages[normalizeurl]=[]  
+    totalpages[normalizeurl][0]=1   
+    totalpages[normalizeurl][1]=[]
+    totalpages[normalizeurl][2]=[]    */
+    totalpages[normalizeurl]={count:1,brokenurls:[]}
     console.log(`Now crawling ${current_url}...`)                             // creating entry for new page
     let htmlbody=''
     try{                                                                   //extracting the html body of the page through a request
         const webpage=await fetch(current_url)
         if (webpage.status>399){
             console.log(`HTTP error- code ${webpage.status}`)
-            return totalpages,exturls
+            totalpages[normalizeurl].brokenurls.push(current_url)
+            //console.log(totalpages)
+            return totalpages
         }
         
         const type=webpage.headers.get('content-type')
         if(!type.includes('text/html')){
             console.log("Doesn't contain text/html content" )
-            return totalpages,exturls
+            //console.log(totalpages)
+            return totalpages
         }
         htmlbody=await webpage.text()
 
@@ -52,11 +65,12 @@ async function pagecrawler(base_url,current_url,totalpages){
     } 
     const nextpages=getHTMLURLs(htmlbody,base_url)                 //extracts all urls from the current html body of the page
     for(const page of nextpages){
-        totalpages=await pagecrawler(base_url,page,totalpages)           //calling recursive func on all the links in all further pages
+        previous_url=normalizeurl
+        totalpages=await pagecrawler(base_url,page,totalpages,previous_url)           //calling recursive func on all the links in all further pages
     }
-
+    //console.log(totalpages)
   
-    return totalpages,exturls
+    return totalpages
 }
 
 function getHTMLURLs(htmlbdy,base){                  //extracts all urls from the html body and pushes them into an array
