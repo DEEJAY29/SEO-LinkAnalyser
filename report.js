@@ -37,7 +37,7 @@ function printpages(pages){
 function sortPages(pages){
   const sortedarr={}
   const arr=Object.keys(pages).sort((p1,p2)=>{
-    return pages[p2][0]-pages[p1][0]
+    return pages[p2].count-pages[p1].count
   })
 
   arr.forEach((key)=>{

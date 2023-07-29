@@ -11,7 +11,7 @@ function NormalizeURL(url){                                  //normalizing the u
 }
 
 
-async function pagecrawler(base_url,current_url,totalpages={},previous_url=""){
+async function pagecrawler(base_url,current_url,totalpages={}){
     
 
     const baseobject=new URL(base_url)
