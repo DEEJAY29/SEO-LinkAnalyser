@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const {pagecrawler}=require('../crawl.js')
 const {printpages}=require('../report.js')
-
+const {Writer}=require('../csv.js')
 
 async function main(){
     if(process.argv.length>3){
@@ -18,6 +18,7 @@ async function main(){
     const pages = await pagecrawler(reqURL, reqURL,{})
 
     printpages(pages)
+    Writer(pages)
     console.log("------------------------END OF REPORT-------------------------------")
     console.log(`This programming ran for ${process.uptime()} seconds`)
 }

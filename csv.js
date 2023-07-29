@@ -1,5 +1,4 @@
 const csv_writer=require('csv-writer').createObjectCsvWriter;
-const {pagecrawler}=require('./crawl.js')
 
 const csvWriter=csv_writer({
     path:'test.csv',
@@ -10,17 +9,18 @@ const csvWriter=csv_writer({
     ]
 })
 
-data=[
-    {
-        
-    }
-]
 
-async function writer(){
+
+
+async function Writer(pages){
+    data=[]
+    pagekey=Object.keys(pages)
     try{
-        const pages = JSON.stringify(await pagecrawler(reqURL, reqURL,{}))
-        const data=pages
-
+        for(url of pagekey){
+            data.push({url:url,
+                internal:pages[url].count,
+                broken:pages[url].brokenurls})
+        }
         await csvWriter.writeRecords(data)
         console.log('The CSV file was written successfully')
     }catch(err){
@@ -29,4 +29,4 @@ async function writer(){
     return
 }
 
-module.exports=writer
+module.exports={Writer}
