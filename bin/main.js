@@ -2,6 +2,7 @@
 const {pagecrawler}=require('../crawl.js')
 const {printpages}=require('../report.js')
 const {Writer}=require('../csv.js')
+const {pdf}=require('../pdf.js')
 
 async function main(){
     if(process.argv.length>3){
@@ -19,6 +20,7 @@ async function main(){
 
     printpages(pages)
     Writer(pages)
+    pdf(pages)
     console.log("------------------------END OF REPORT-------------------------------")
     console.log(`This programming ran for ${process.uptime()} seconds`)
 }
